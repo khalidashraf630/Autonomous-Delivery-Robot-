@@ -30,6 +30,31 @@
       <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Sun</uri>
     </include>
 
+
+    <!-- Black line for camera-based line following -->
+    <model name="black_line">
+      <static>true</static>
+
+      <link name="line_link">
+        <visual name="line_visual">
+          <!-- Slightly above the floor to avoid visual overlap -->
+          <pose>0 0 0.002 0 0 0</pose>
+
+          <geometry>
+            <box>
+              <size>8 0.06 0.002</size>
+            </box>
+          </geometry>
+
+          <material>
+            <ambient>0.02 0.02 0.02 1</ambient>
+            <diffuse>0.02 0.02 0.02 1</diffuse>
+            <specular>0 0 0 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
     <scene>
       <shadows>false</shadows>
     </scene>

@@ -95,6 +95,16 @@ ros2 run rqt_image_view rqt_image_view
 
 If needed, update the workspace path. In the image viewer, select `/camera/image_raw`.
 
+## 7. Line detection (optional)
+
+Open Terminal 4 and run:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/Autonomous-Delivery-Robot-/ros2_ws/install/setup.bash
+ros2 run line_follower line_detector
+```
+
 ## Troubleshooting
 
 - **`Package 'delivery_robot_gazebo' not found`:** Make sure the build succeeded and you ran `source install/setup.bash` from the correct workspace.

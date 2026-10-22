@@ -6,8 +6,6 @@
 
 
 
-// Everything else calls this
-// speed: -255 to +255
 void setLeftMotor(int speed) {
   speed = constrain(speed, -255, 255);
   if (speed >= 0) {
@@ -76,7 +74,6 @@ void setup() {
   pinMode(DIR_RIGHT, OUTPUT);
 
   stopMotors();
-  Serial.println("Motors ready!");
 }
 
 //  TEST 

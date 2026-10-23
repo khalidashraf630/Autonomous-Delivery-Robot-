@@ -32,17 +32,17 @@
 
 
     <!-- Black line for camera-based line following -->
-    <model name="black_line">
+    <!--<model name="black_line">
       <static>true</static>
 
       <link name="line_link">
         <visual name="line_visual">
-          <!-- Slightly above the floor to avoid visual overlap -->
+          
           <pose>0 0 0.002 0 0 0</pose>
 
           <geometry>
             <box>
-              <size>8 0.06 0.002</size>
+              <size>1 0.2 0.02</size>
             </box>
           </geometry>
 
@@ -53,7 +53,7 @@
           </material>
         </visual>
       </link>
-    </model>
+    </model>-->
 
     <model name="black_line_track">
       <static>true</static>

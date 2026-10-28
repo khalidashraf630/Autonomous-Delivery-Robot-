@@ -5,6 +5,7 @@ from rclpy.qos import qos_profile_sensor_data
 from sensor_msgs.msg import Image
 from geometry_msgs.msg import Twist
 from cv_bridge import CvBridge
+from std_msgs.msg import Int32
 
 
 class LineDetector(Node):
@@ -24,6 +25,15 @@ class LineDetector(Node):
         self.cmd_pub = self.create_publisher(
             Twist,
             '/cmd_vel',
+            10
+        )
+
+        self.detected_aruco_id = None
+
+        self.aruco_subscription = self.create_subscription(
+            Int32,
+            '/aruco/detected_id',
+            self.aruco_callback,
             10
         )
 
@@ -66,6 +76,16 @@ class LineDetector(Node):
         self.get_logger().info(
             'PID line follower with 90-degree corner handling started.'
         )
+
+    def aruco_callback(self, msg):
+        marker_id = msg.data
+
+        if marker_id != self.detected_aruco_id:
+            self.detected_aruco_id = marker_id
+
+            self.get_logger().info(
+                f'Received ArUco ID: {marker_id}'
+            )
 
     def find_line_center(self, mask, y_start, y_end):
         """

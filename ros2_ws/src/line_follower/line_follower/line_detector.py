@@ -28,12 +28,12 @@ class LineDetector(Node):
             10
         )
 
-        self.detected_aruco_id = None
+        self.target_received = False
 
-        self.aruco_subscription = self.create_subscription(
+        self.target_subscription = self.create_subscription(
             Int32,
-            '/aruco/detected_id',
-            self.aruco_callback,
+            '/target_aruco_id',
+            self.target_callback,
             10
         )
 
@@ -77,15 +77,19 @@ class LineDetector(Node):
             'PID line follower with 90-degree corner handling started.'
         )
 
-    def aruco_callback(self, msg):
-        marker_id = msg.data
-
-        if marker_id != self.detected_aruco_id:
-            self.detected_aruco_id = marker_id
-
-            self.get_logger().info(
-                f'Received ArUco ID: {marker_id}'
+    def target_callback(self, msg):
+        if msg.data < 0:
+            self.get_logger().warning(
+                'Target ID must be non-negative.'
             )
+            return
+
+        self.target_received = True
+        self.reset_pid()
+
+        self.get_logger().info(
+            f'Target received: {msg.data}. Starting line following.'
+        )
 
     def find_line_center(self, mask, y_start, y_end):
         """
@@ -154,6 +158,12 @@ class LineDetector(Node):
 
         height, width = frame.shape[:2]
         image_center = width / 2.0
+
+        if not self.target_received:
+            self.stop_robot()
+            cv2.imshow('Line Following', frame)
+            cv2.waitKey(1)
+            return
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 

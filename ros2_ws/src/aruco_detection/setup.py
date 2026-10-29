@@ -26,6 +26,7 @@ setup(
         'console_scripts': [
             'aruco_detector = aruco_detection.aruco_detector:main',
             'aruco_viewer = aruco_detection.aruco_viewer:main',
+            'aruco_target_monitor = aruco_detection.aruco_target_monitor:main',
         ],
     },
 )

@@ -39,4 +39,11 @@ def generate_launch_description():
             name='aruco_viewer',
             output='screen'
         ),
+
+        Node(
+            package='aruco_detection',
+            executable='aruco_target_monitor',
+            name='aruco_target_monitor',
+            output='screen'
+        ),
     ])

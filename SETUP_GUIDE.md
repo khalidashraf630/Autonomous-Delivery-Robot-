@@ -105,11 +105,52 @@ source ~/Autonomous-Delivery-Robot-/ros2_ws/install/setup.bash
 ros2 run line_follower line_detector
 ```
 
-## Troubleshooting
+## How to Run the final code
 
-- **`Package 'delivery_robot_gazebo' not found`:** Make sure the build succeeded and you ran `source install/setup.bash` from the correct workspace.
-- **A dependency is missing:** Run `rosdep install --from-paths src --ignore-src -r -y` from the workspace after sourcing ROS 2 Jazzy.
-- **Gazebo is already running or fails to start:** Close any old Gazebo simulation terminals, then try launching again.
-- **The robot does not move:** Make sure the simulation is running and the keyboard teleoperation terminal is open. Check that the command remaps `cmd_vel` to `/cmd_vel` exactly as shown above.
+### 1. Build and Launch the Robot
 
-The `build/`, `install/`, and `log/` folders are generated locally during the build. They do not need to be included in the shared repository.
+Open Terminal 1 and run:
+
+```bash
+cd ~/Projects/Autonomous-Delivery-Robot-/ros2_ws
+source /opt/ros/jazzy/setup.bash
+colcon build
+source install/setup.bash
+ros2 launch delivery_robot_gazebo full_robot.launch.py
+```
+
+### 2. Send the Target ArUco ID
+
+Open Terminal 2 and run the following command to select marker ID `3`:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/Projects/Autonomous-Delivery-Robot-/ros2_ws/install/setup.bash
+ros2 topic pub --once /target_aruco_id std_msgs/msg/Int32 "{data: 3}"
+```
+
+Replace `3` with the desired marker ID.
+
+### 3. Monitor the Target Detection Event
+
+Open Terminal 3 to receive a notification when the target marker is detected:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+source ~/Projects/Autonomous-Delivery-Robot-/ros2_ws/install/setup.bash
+ros2 topic echo /target_aruco_event
+```
+
+Example output:
+
+```text
+data: TARGET_REACHED:3:LEFT
+```
+
+`LEFT` or `RIGHT` indicates the detected marker's position.
+
+
+**Notes:**
+- Keep Terminal 1 running while using the other terminals.
+- The robot starts line following after receiving the target ID.
+- The target event confirms marker detection and position; it does not necessarily mean the robot has stopped at the destination.

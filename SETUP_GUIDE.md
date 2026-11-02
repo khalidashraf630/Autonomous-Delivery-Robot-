@@ -83,14 +83,14 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r cmd_vel:=/cmd
 
 If the project is stored in a different location, update the second `source` path. Keep the terminal focused to send keyboard commands. Use the key guide printed by the teleoperation program; commonly, `i` moves forward, `,` moves backward, `j` turns left, `l` turns right, and `k` stops.
 
-## 6. View the camera (optional)
+## 6. Start the usb camera
 
 Open Terminal 3 and run:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 source ~/Autonomous-Delivery-Robot-/ros2_ws/install/setup.bash
-ros2 run rqt_image_view rqt_image_view
+ros2 run usb_camera camera_publisher
 ```
 
 If needed, update the workspace path. In the image viewer, select `/camera/image_raw`.
@@ -112,7 +112,7 @@ ros2 run line_follower line_detector
 Open Terminal 1 and run:
 
 ```bash
-cd ~/Projects/Autonomous-Delivery-Robot-/ros2_ws
+cd ~/Autonomous-Delivery-Robot-/ros2_ws
 source /opt/ros/jazzy/setup.bash
 colcon build
 source install/setup.bash
@@ -125,7 +125,7 @@ Open Terminal 2 and run the following command to select marker ID `3`:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source ~/Projects/Autonomous-Delivery-Robot-/ros2_ws/install/setup.bash
+source ~/Autonomous-Delivery-Robot-/ros2_ws/install/setup.bash
 ros2 topic pub --once /target_aruco_id std_msgs/msg/Int32 "{data: 3}"
 ```
 
@@ -137,7 +137,7 @@ Open Terminal 3 to receive a notification when the target marker is detected:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source ~/Projects/Autonomous-Delivery-Robot-/ros2_ws/install/setup.bash
+source ~/Autonomous-Delivery-Robot-/ros2_ws/install/setup.bash
 ros2 topic echo /target_aruco_event
 ```
 

@@ -70,7 +70,7 @@ class LineDetector(Node):
         # (chat-GPT suggestion) stops here 
 
         # Image threshold for a black line
-        self.threshold_value = 70
+        self.threshold_value = 15
         self.min_contour_area = 10
 
         self.get_logger().info(

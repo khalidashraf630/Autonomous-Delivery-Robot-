@@ -5,7 +5,7 @@ from rclpy.qos import qos_profile_sensor_data
 from sensor_msgs.msg import Image
 from geometry_msgs.msg import Twist
 from cv_bridge import CvBridge
-from std_msgs.msg import Int32
+from std_msgs.msg import Int32, Float32
 
 
 class LineDetector(Node):
@@ -25,6 +25,12 @@ class LineDetector(Node):
         self.cmd_pub = self.create_publisher(
             Twist,
             '/cmd_vel',
+            10
+        )
+
+        self.error_pub = self.create_publisher(
+            Float32,
+            '/line_error',
             10
         )
 
@@ -234,13 +240,19 @@ class LineDetector(Node):
 
 
         if middle_error is not None:
-            self.pid_follow(middle_error)
+            selected_error = middle_error
             self.prev_middle_error = middle_error
         else:
             if bottom_error is not None:
-                self.pid_follow(bottom_error)
+                selected_error = bottom_error
             else:
-                self.pid_follow(self.prev_middle_error)
+                selected_error = self.prev_middle_error
+
+        self.pid_follow(selected_error)
+
+        error_msg = Float32()
+        error_msg.data = float(selected_error)
+        self.error_pub.publish(error_msg)
 
         #(chat-GPT suggestion)
         # ------------------------------------------------

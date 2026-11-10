@@ -11,7 +11,7 @@
 
 // 2-UART COMMUNICATION
 
-#define PI_LINK Serial2      
+#define PI_LINK Serial  
 #define RXD2 16
 #define TXD2 17
 #define BAUD_RATE 115200
@@ -58,8 +58,9 @@ void handleMessage(char* msg) {
         lastMessageTime = millis();
         communicationActive = true;
 
-        Serial.print("Received Error: ");
-        Serial.println(Input);
+        // TEST ONLY: Confirm error received from ROS2
+        PI_LINK.print("RECEIVED:E:");
+        PI_LINK.println(Input, 4);
     }
 
     // ---- S  stop ----

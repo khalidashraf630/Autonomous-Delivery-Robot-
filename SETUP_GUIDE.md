@@ -105,52 +105,70 @@ source ~/Autonomous-Delivery-Robot-/ros2_ws/install/setup.bash
 ros2 run line_follower line_detector
 ```
 
-## How to Run the final code
+## How to Run the Final Code (Real Robot)
 
-### 1. Build and Launch the Robot
+### 1. Check USB Ports
+
+Connect the USB camera and ESP32-S3 to the laptop.
 
 Open Terminal 1 and run:
 
 ```bash
-cd ~/Autonomous-Delivery-Robot-/ros2_ws
+python3 -m serial.tools.list_ports -v
+ls /dev/video*
+```
+
+Make sure the ports match the code:
+
+- **ESP32-S3:** `/dev/ttyACM0` (in `esp32_bridge.py`)
+- **USB Camera:** `/dev/video2` (in `camera_publisher.py`)
+- **Baud Rate:** `115200`
+
+**Note:** If the ports are different, update them in the corresponding code before running the system. Make sure the correct camera device is selected.
+
+### 2. Build and Launch the Robot
+
+In Terminal 1, run:
+
+```bash
+cd ~/Projects/Autonomous-Delivery-Robot-/ros2_ws
 source /opt/ros/jazzy/setup.bash
-colcon build
+colcon build --symlink-install
 source install/setup.bash
-ros2 launch delivery_robot_gazebo full_robot.launch.py
+ros2 launch robot_communication robot.launch.py
 ```
 
-### 2. Send the Target ArUco ID
+### 3. Send the Target ArUco ID
 
-Open Terminal 2 and run the following command to select marker ID `3`:
+Open Terminal 2 and run:
 
 ```bash
-source /opt/ros/jazzy/setup.bash
-source ~/Autonomous-Delivery-Robot-/ros2_ws/install/setup.bash
-ros2 topic pub --once /target_aruco_id std_msgs/msg/Int32 "{data: 3}"
+source ~/Projects/Autonomous-Delivery-Robot-/ros2_ws/install/setup.bash
+ros2 topic pub --once /target_aruco_id std_msgs/msg/Int32 "{data: 2}"
 ```
 
-Replace `3` with the desired marker ID.
+Replace `2` with the desired marker ID.
 
-### 3. Monitor the Target Detection Event
+### 4. Monitor the Target Detection Event
 
-Open Terminal 3 to receive a notification when the target marker is detected:
+Open Terminal 3 and run:
 
 ```bash
-source /opt/ros/jazzy/setup.bash
-source ~/Autonomous-Delivery-Robot-/ros2_ws/install/setup.bash
+source ~/Projects/Autonomous-Delivery-Robot-/ros2_ws/install/setup.bash
 ros2 topic echo /target_aruco_event
 ```
 
-Example output:
+Expected output:
 
 ```text
-data: TARGET_REACHED:3:LEFT
+data: TARGET_REACHED:2:LEFT
 ```
 
 `LEFT` or `RIGHT` indicates the detected marker's position.
 
+**Note:** ArUco marker detection and the target arrival event are not fully working yet and still need testing and debugging.
 
-**Notes:**
+### Notes
+
 - Keep Terminal 1 running while using the other terminals.
-- The robot starts line following after receiving the target ID.
-- The target event confirms marker detection and position; it does not necessarily mean the robot has stopped at the destination.
+- Close Arduino Serial Monitor before launching ROS2
